@@ -1,0 +1,16 @@
+Tests for assorted rollsum implementations
+
+```
+make testfiles
+make preptest
+make test
+```
+
+You'll need the implementations
+ - bup (must already be compiled)
+ - rsroll (must already be compiled)
+ - camlistore rollsum (on your GOPATH)
+and compilers:
+ - gcc
+ - rustc
+ - go
