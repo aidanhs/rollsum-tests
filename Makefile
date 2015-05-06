@@ -23,14 +23,15 @@ CAMROLL_CMD = ./test_camroll
 
 preptest:
 	rustc -O -L $(RSROLL_DIR)/target/release -L $(RSROLL_DIR)/target/release/deps test_rsroll.rs
+	go get github.com/camlistore/camlistore/pkg/rollsum
 	go build test_camroll.go
 
 test:
 	( \
-	    echo "FILE BUP_FAIL RSROLL_FAIL CAMROLL_FAIL BUP_TIME RSROLL_TIME CAMROLL_TIME"; \
+	    echo "FILE SIZE BUP_FAIL RSROLL_FAIL CAMROLL_FAIL BUP_TIME RSROLL_TIME CAMROLL_TIME"; \
 	    export TMPFILE=$$(mktemp); \
 	    for f in $(TEST_FILES); do \
-	        echo -n "$$f "; \
+	        echo -n "$$(basename $$f) $$(du -h $$f | cut -f1) "; \
 	        EXPECT=$$(cat $$f.sum); \
 	        cat $$f > /dev/null; \
 	        BUP_OUT="$$(time -f %U $(BUP_CMD) $$f 2>$$TMPFILE | sha1sum)"; \
