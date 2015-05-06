@@ -5,7 +5,8 @@ default: testfiles
 mtgen: mtgen.c mt19937ar.c
 	gcc -o mtgen -static -O3 mtgen.c
 
-testfiles: mtgen 1.test 2.test 3.test 4.test 5.test 6.test 7.test 8.test 9.test 10.test
+TEST_FILES = $(addsuffix .test,$(addprefix test/,01 02 03 04 05 06 07 08 09 10 11 12))
+testfiles: mtgen $(TEST_FILES)
 
 %.test:
 	N=$$(basename $@ .test) && \
@@ -14,11 +15,29 @@ testfiles: mtgen 1.test 2.test 3.test 4.test 5.test 6.test 7.test 8.test 9.test 
 	  ./mtgen $$SEED $$SIZE > $@
 
 BUP_LIB_DIR ?= ./bup/lib
-RUST_ROLLSUM_DIR ?= ./rust-rollsum
+RSROLL_DIR ?= ./rust-rollsum
+export PYTHONPATH = $(BUP_LIB_DIR)
+BUP_CMD = python2 -u test_bup.py
+RSROLL_CMD = ./test_rollsum
 
 preptest:
-	rustc -L $(RUST_ROLLSUM_DIR)/target/release -L $(RUST_ROLLSUM_DIR)/target/release/deps test_rollsum.rs
+	rustc -O -L $(RSROLL_DIR)/target/release -L $(RSROLL_DIR)/target/release/deps test_rollsum.rs
 
 test:
-	PYTHONPATH=$(BUP_LIB_DIR) python2 test_bup.py 4.test
-	./test_rollsum 4.test
+	( \
+	    echo "FILE BUP_FAIL RUST-ROLLSUM_FAIL BUP_TIME RUST-ROLLSUM_TIME"; \
+	    export TMPFILE=$$(mktemp); \
+	    for f in $(TEST_FILES); do \
+	        echo -n "$$f "; \
+	        EXPECT=$$(cat $$f.sum); \
+	        BUP_OUT="$$(time -f %U $(BUP_CMD) $$f 2>$$TMPFILE | sha1sum)"; \
+	        BUP_TIME="$$(cat $$TMPFILE)"; \
+	        RSROLL_OUT="$$(time -f %U $(RSROLL_CMD) $$f 2>$$TMPFILE | sha1sum)"; \
+	        RSROLL_TIME="$$(cat $$TMPFILE)"; \
+	        [ "$$BUP_OUT" = "$$EXPECT" ]; echo -n "$$? "; \
+	        [ "$$RSROLL_OUT" = "$$EXPECT" ]; echo -n "$$? "; \
+	        echo -n "$$BUP_TIME "; \
+	        echo -n "$$RSROLL_TIME "; \
+	        echo; \
+	    done \
+	) | column -t
