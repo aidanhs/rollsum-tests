@@ -1,15 +1,25 @@
 Tests for assorted rollsum implementations
 
-
-You'll need the implementations
- - bup (must already be compiled)
- - rsroll (must already be compiled)
- - camlistore rollsum (on your GOPATH)
-and compilers:
+You'll need compilers (for the test programs):
  - gcc
  - rustc
  - go
 
+You'll need the rollsum implementations:
+ - bup
+ - rsroll
+ - camlistore rollsum
+
+Getting the repos (you'll need `cargo` in addition to the compilers for rsroll):
+```
+$ git clone https://github.com/aidanhs/rollsum-tests.git && cd rollsum-tests
+$ git clone https://github.com/bup/bup.git && cd bup && make && cd ..
+$ git clone https://github.com/aidanhs/rsroll.git && cd rsroll && cargo build --release && cd ..
+$ git clone https://github.com/camlistore/camlistore.git
+```
+If you already have these hanging around, feel free to symlink them.
+
+Running tests:
 ```
 $ make testfiles # generate deterministic test files
 [...]

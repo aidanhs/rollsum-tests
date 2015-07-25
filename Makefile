@@ -14,8 +14,8 @@ testfiles: mtgen $(TEST_FILES)
 	  SIZE=$$(echo "$$N^8" | bc) && \
 	  ./mtgen $$SEED $$SIZE > $@
 
-BUP_LIB_DIR ?= ./bup/lib
-RSROLL_DIR ?= ./rust-rollsum
+BUP_LIB_DIR = ./bup/lib
+RSROLL_DIR = ./rsroll
 export PYTHONPATH = $(BUP_LIB_DIR)
 BUP_CMD = python2 -u test_bup.py
 RSROLL_CMD = ./test_rsroll
@@ -23,7 +23,6 @@ CAMROLL_CMD = ./test_camroll
 
 preptest:
 	rustc -O -L $(RSROLL_DIR)/target/release -L $(RSROLL_DIR)/target/release/deps test_rsroll.rs
-	go get github.com/camlistore/camlistore/pkg/rollsum
 	go build test_camroll.go
 
 test:
