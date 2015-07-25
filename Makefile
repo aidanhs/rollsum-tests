@@ -5,7 +5,7 @@ default: testfiles
 mtgen: mtgen.c mt19937ar.c
 	gcc -o mtgen -static -O3 mtgen.c
 
-TEST_FILES = $(addsuffix .test,$(addprefix test/,01 02 03 04 05 06 07 08 09 10 11 12))
+TEST_FILES ?= $(addsuffix .test,$(addprefix test/,01 02 03 04 05 06 07 08 09 10 11 12))
 testfiles: mtgen $(TEST_FILES)
 
 %.test:
@@ -31,6 +31,7 @@ test:
 	    echo "FILE SIZE BUP_FAIL RSROLL_FAIL CAMROLL_FAIL BUP_TIME RSROLL_TIME CAMROLL_TIME"; \
 	    export TMPFILE=$$(mktemp); \
 	    for f in $(TEST_FILES); do \
+	        if [ ! -f $$f -o ! -f $$f.sum ]; then echo "INVALID FILE $$f" >&2; exit 1; fi; \
 	        echo -n "$$(basename $$f) $$(du -h $$f | cut -f1) "; \
 	        EXPECT=$$(cat $$f.sum); \
 	        cat $$f > /dev/null; \
