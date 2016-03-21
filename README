@@ -1,31 +1,30 @@
 Tests for assorted rollsum implementations
 
-You'll need compilers (for the test programs):
- - gcc
- - rustc
- - go
-
-You'll need the rollsum implementations:
+The following rollsum implementations are tested, all theoretically using the same algorithm:
  - bup
  - rsroll
  - camlistore rollsum
 
-Getting the repos (you'll need `cargo` in addition to the compilers for rsroll):
+The following compilers are necessary:
+ - gcc
+ - rustc (+ cargo)
+ - go
+
+Clone this repo, get the rollsum implementations and build a Docker image with the compilers:
 ```
 $ git clone https://github.com/aidanhs/rollsum-tests.git && cd rollsum-tests
-$ git clone https://github.com/bup/bup.git && cd bup && make && cd ..
-$ git clone https://github.com/aidanhs/rsroll.git && cd rsroll && cargo build --release && cd ..
-$ git clone https://github.com/camlistore/camlistore.git
+$ make dep
 ```
 If you already have these hanging around, feel free to symlink them.
 
 Running tests:
 ```
-$ make testfiles # generate deterministic test files
+$ docker run -it -v $(pwd):/work --rm rollsum-tests bash
+# make testfiles # generate deterministic test files
 [...]
-$ make preptest # build the rust and go test tools
+# make preptest # build the assorted test programs
 [...]
-$ BUP_LIB_DIR=./bup/lib RSROLL_DIR=./rsroll make test # actually run tests
+# make test # actually run tests
 [...]
 FILE     SIZE  BUP_FAIL  RSROLL_FAIL  CAMROLL_FAIL  BUP_TIME  RSROLL_TIME  CAMROLL_TIME
 01.test  4.0K  0         0            0             0.00      0.00         0.00
