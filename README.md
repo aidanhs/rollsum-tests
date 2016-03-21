@@ -15,7 +15,7 @@ Clone this repo, get the rollsum implementations and build a Docker image with t
 $ git clone https://github.com/aidanhs/rollsum-tests.git && cd rollsum-tests
 $ make dep
 ```
-If you already have these hanging around, feel free to symlink them.
+If you already have the implementations hanging around, feel free to symlink them.
 
 Running tests:
 ```
