@@ -13,11 +13,14 @@ pub fn main () {
 
     let mut ofs: usize = 0;
     while ofs < buf.len() {
-        let (count, bits) = rollsum::split_find_ofs(&buf[ofs..]);
-        println!("{} {}", count, bits);
-        if count == 0 {
-            break;
+        let mut b = rollsum::Bup::new();
+        if let Some(count) = b.find_chunk_edge(&buf[ofs..]) {
+            let bits = b.count_bits();
+            println!("{} {}", count, bits);
+            ofs += count;
+        } else {
+            println!("0 -1");
+            break
         }
-        ofs += count;
     }
 }

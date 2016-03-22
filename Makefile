@@ -7,11 +7,11 @@ mtgen: mtgen.c mt19937ar.c
 
 dep:
 	[ -d bup ] || (git clone https://github.com/bup/bup.git && cd bup && git checkout 0.27)
-	[ -d rsroll ] || (git clone https://github.com/aidanhs/rsroll.git && cd rsroll && git checkout 0.1.0)
+	[ -d rsroll ] || (git clone https://github.com/aidanhs/rsroll.git && cd rsroll && git checkout 0.2.0)
 	[ -d camlistore ] || (git clone https://github.com/camlistore/camlistore.git && cd camlistore && git checkout 0.8)
 	docker build -t rollsum-tests .
 
-TEST_FILES ?= $(addsuffix .test,$(addprefix test/,01 02 03 04 05 06 07 08 09 10 11 12))
+TEST_FILES ?= $(addsuffix .test,$(addprefix test/,01 02 03 04 05 06 07 08 09 10 11 12 13 14))
 testfiles: mtgen $(TEST_FILES)
 
 %.test:
