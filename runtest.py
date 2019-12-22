@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import statistics
 from subprocess import call, check_output
 import sys
 import tempfile
@@ -32,6 +33,7 @@ def main():
         out(test_name)
         out(check_output(f'du -h {test_file} | cut -f1', shell=True).decode('ascii').strip())
         expected_sha = open(test_sum_file, 'rb').read()
+        first_nonerr = True
         for impl_name, impl_cmd in test_impls:
             log(f'Testing {test_file}=>{impl_name}')
             call(f'cat {test_file} > /dev/null', shell=True)
@@ -42,16 +44,30 @@ def main():
             max_mem = round(int(max_mem) / 1024)
             actual_sha = check_output(f'sha1sum <{out_tmpfile.name}', shell=True)
             err = actual_sha != expected_sha
-            count = len(open(out_tmpfile.name, 'rb').readlines())
+            sizes = [int(size) for size in open(out_tmpfile.name, 'rb').readlines()]
+            count = len(sizes)
+            if count > 1000:
+                pstdev = round(statistics.pstdev(sizes))
+            else:
+                pstdev = '-'
 
-            res = f'{user_time}[{"X" if err else "-"},{count}l,{max_mem}M]'
+            if err or first_nonerr:
+                res = f'{user_time}[{"X" if err else "/"},{count}c,{pstdev},{max_mem}M]'
+                if not err:
+                    first_nonerr = False
+            else:
+                res = f'{user_time}[",",",{max_mem}M]'
             out(res)
         outline()
 
     log()
-    log('KEY')
-    log('Each cell is `time[err,count,mem]`. `time` is in seconds, `err` indicates whether the split result failed to')
-    log('match bup exactly, `count` indicates how many splits there were, mem indicates max memory in MB.')
+    log('HOW TO READ THE RESULTS')
+    log('- Each cell is `time[err,count,pstdev,mem]`. `time` is in seconds, `err` indicates whether the split result failed')
+    log('  to match bup exactly, `count` indicates how many splits there were, `pstdev` indicates the standard devision of the')
+    log('  split sizes and `mem` indicates max memory in MB.')
+    log('- Standard deviation is only calculated for tests with >1000 splits to try and give a rough judgement on the hash')
+    log('  algorighm quality (intuitively I think random data should be a happy case for a hash).')
+    log('- To save screen space, the common results from non-erroring lines are collapsed.')
     log()
 
 if __name__ == '__main__':

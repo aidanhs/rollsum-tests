@@ -48,5 +48,5 @@ test:
 	  "RSROGE256=./test_rust rsroll-gear256" \
 	  "IPFSRA256=./test_ipfs rabin256" \
 	  "IPFSSPL256=./test_ipfs split256" \
-	  "IPFSBU=./test_ipfs buzhash" \
+	  "IPFSBZ=./test_ipfs buzhash" \
 	| column -t
