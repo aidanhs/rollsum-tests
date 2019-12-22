@@ -20,7 +20,7 @@ func main() {
         panic("file bad")
     }
 
-    s := chunk.NewBuzhash(bytes.NewReader(buf)) // according to bup design
+    s := chunk.NewBuzhash(bytes.NewReader(buf))
 
     var ofs uint = 0
     for ofs < uint(len(buf)) {

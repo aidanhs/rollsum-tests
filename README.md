@@ -1,30 +1,53 @@
-Tests for assorted rollsum implementations
+# Tests for assorted rollsum implementations
+
+## Competitors
 
 The following rollsum implementations are tested, all theoretically using the same algorithm:
- - bup
- - rsroll
- - perkeep rollsum
+ - bup (C + Python)
+ - rsroll (Rust)
+ - perkeep rollsum (Go)
 
-The following compilers are used for the implementations, all within a Docker container:
- - clang
- - rustc (+ cargo)
- - go
+These others are tested for the sake of curiosity after reading https://github.com/ipfs/go-ipfs-chunker/issues/18 (which is in Go):
+ - go-ipfs-chunker rabin implementation (two variants, ~8k chunks and ~256k chunks)
+ - go-ipfs-chunker split implementation (fixed size 8k chunks)
+ - go-ipfs-chunker buzhash implementation (~256k chunks)
+ - rsroll for 256k chunks
 
-Clone this repo, get the rollsum implementations and build a Docker image with the compilers (you can use Docker rather than podman by editing the Makefile):
+Comments:
+ - using a single chunk size in a rsroll seemed to help a little, so I didn't parameterise it. I didn't test if would help for Go
+ - I partitioned out the 8k and 256k competitors in case this number of results would make a difference - in practice it does make
+   some, but not enough the change rankings (as you can see from the results)
+ - currently these implementation benchmarking times *include* the initial load of the file - this is bad and they shouldn't
+
+# Prerequisites
+
+You need Podman or Docker (if the latter, just change the command in the Makefile and it should work).
+
+Clone this repo, get the rollsum implementations and build a Docker image with the compilers:
 
 ```
 $ git clone https://github.com/aidanhs/rollsum-tests.git && cd rollsum-tests && git submodule update --init --recursive
-$ make dep
+$ make dep # create an image for the container
 ```
-If you already have the implementations hanging around, feel free to symlink them.
 
-Running tests:
+# Running Tests
+
+Jump into the container to and set up the test environment.
+
+NOTE: all the implementations load the test file for a run fully into RAM before starting work. The test files are all
+below 1.5GB.
+
 ```
 $ podman run -it -v $(pwd):/work --tmpfs /tmp --rm rollsum-tests bash
 # make testfiles # generate deterministic test files
 [...]
 # make preptest # build the assorted test programs
 [...]
+```
+
+Finally:
+
+```
 # make test # actually run tests
 [...]
 FILE     SIZE  BUP(err,cnt)    RSROLL(err,cnt)  PERKEEP(err,cnt)  IPFSRA(err,cnt)  IPFSBU(err,cnt)  IPFSSPL(err,cnt)

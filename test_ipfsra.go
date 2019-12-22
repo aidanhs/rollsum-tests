@@ -3,6 +3,7 @@ package main
 import "bytes"
 import "fmt"
 import "os"
+import "strconv"
 import "io/ioutil"
 import "github.com/ipfs/go-ipfs-chunker"
 
@@ -15,12 +16,17 @@ func find_split(r chunk.Splitter) (uint, int) {
 }
 
 func main() {
-    buf, err := ioutil.ReadFile(os.Args[1])
+    avgchunk_s := os.Args[1]
+    avgchunk, err := strconv.Atoi(avgchunk_s)
+    if err != nil {
+        panic("bad avgchunk")
+    }
+    buf, err := ioutil.ReadFile(os.Args[2])
     if err != nil {
         panic("file bad")
     }
 
-    s := chunk.NewRabin(bytes.NewReader(buf), 8192) // according to bup design
+    s := chunk.NewRabin(bytes.NewReader(buf), uint64(avgchunk))
 
     var ofs uint = 0
     for ofs < uint(len(buf)) {
