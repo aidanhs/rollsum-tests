@@ -25,7 +25,7 @@ PERKEEP_CMD = ./test_perkeep
 preptest:
 	cd impl/bup && make
 	cd impl/rsroll && cargo build --release
-	rustc -O -L ./rsroll/target/release -L ./impl/rsroll/target/release/deps test_rsroll.rs
+	rustc -C opt-level=3 -C lto -L ./rsroll/target/release -L ./impl/rsroll/target/release/deps test_rsroll.rs
 	# golang "internal modules" and "import path checking" biting us here
 	export GOPATH=$$(mktemp -d) && mkdir -p $$GOPATH/src/rollsum && cp impl/perkeep/internal/rollsum/rollsum.go $$GOPATH/src/rollsum/ && sed -i 's#// import.*##g' $$GOPATH/src/rollsum/rollsum.go && go build test_perkeep.go
 

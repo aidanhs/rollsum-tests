@@ -7,3 +7,6 @@
 [submodule "impl/perkeep"]
 	path = impl/perkeep
 	url = git@github.com:perkeep/perkeep.git
+[submodule "impl/go-ipfs-chunker"]
+	path = impl/go-ipfs-chunker
+	url = git@github.com:ipfs/go-ipfs-chunker.git
