@@ -20,21 +20,22 @@ testfiles: mtgen $(TEST_FILES)
 export PYTHONPATH = ./impl/bup/lib
 # These aim for ~8k chunksize
 BUP_CMD = python2 -u test_bup.py
-RSROLL_CMD = ./test_rsroll
+RSROBU_CMD = ./test_rsroll bup
+RSROGE_CMD = ./test_rsroll gear
 PERKEEP_CMD = ./test_perkeep
-IPFSRA_CMD = ./test_ipfsra 8192
-IPFSSPL_CMD = ./test_ipfsspl 8192
+IPFSRA_CMD = ./test_ipfs rabin
+IPFSSPL_CMD = ./test_ipfs split
 # These aim for ~256k chunksize
-RSROLL256_CMD = ./test_rsroll256
-IPFSRA256_CMD = ./test_ipfsra $$((256*1024))
-IPFSSPL256_CMD = ./test_ipfsspl $$((256*1024))
-IPFSBU_CMD = ./test_ipfsbu
+RSROBU256_CMD = ./test_rsroll bup256
+RSROGE256_CMD = ./test_rsroll gear256
+IPFSRA256_CMD = ./test_ipfs rabin256
+IPFSSPL256_CMD = ./test_ipfs split256
+IPFSBU_CMD = ./test_ipfs buzhash
 
 preptest:
 	cd impl/bup && make
 	cd impl/rsroll && cargo build --release
 	rustc -C opt-level=3 -C lto -L ./rsroll/target/release -L ./impl/rsroll/target/release/deps test_rsroll.rs
-	rustc -C opt-level=3 -C lto -L ./rsroll/target/release -L ./impl/rsroll/target/release/deps test_rsroll256.rs
 	# golang "internal modules" and "import path checking" biting us here
 	export GOPATH=$$(mktemp -d) && \
 	  mkdir -p $$GOPATH/src/rollsum && \
@@ -43,13 +44,19 @@ preptest:
 	  go build test_perkeep.go
 	export GOPATH=$$(mktemp -d) && \
 	  go get github.com/ipfs/go-ipfs-chunker && \
-	  go build test_ipfsra.go
-	export GOPATH=$$(mktemp -d) && \
-	  go get github.com/ipfs/go-ipfs-chunker && \
-	  go build test_ipfsspl.go
-	export GOPATH=$$(mktemp -d) && \
-	  go get github.com/ipfs/go-ipfs-chunker && \
-	  go build test_ipfsbu.go
+	  go build test_ipfs.go
 
 test:
-	./runtest.py "$(TEST_FILES)" "BUP=$(BUP_CMD)" "RSROLL=$(RSROLL_CMD)" "PERKEEP=$(PERKEEP_CMD)" "IPFSRA=$(IPFSRA_CMD)" "IPFSSPL=$(IPFSSPL_CMD)" "RSROLL256=$(RSROLL256_CMD)" "IPFSRA256=$(IPFSRA256_CMD)" "IPFSSPL256=$(IPFSSPL256_CMD)" "IPFSBU=$(IPFSBU_CMD)" | column -t
+	./runtest.py "$(TEST_FILES)" \
+	  "BUP=$(BUP_CMD)" \
+	  "RSROBU=$(RSROBU_CMD)" \
+	  "RSROGE=$(RSROGE_CMD)" \
+	  "PERKEEP=$(PERKEEP_CMD)" \
+	  "IPFSRA=$(IPFSRA_CMD)" \
+	  "IPFSSPL=$(IPFSSPL_CMD)" \
+	  "RSROBU256=$(RSROBU256_CMD)" \
+	  "RSROGE256=$(RSROGE256_CMD)" \
+	  "IPFSRA256=$(IPFSRA256_CMD)" \
+	  "IPFSSPL256=$(IPFSSPL256_CMD)" \
+	  "IPFSBU=$(IPFSBU_CMD)" \
+	| column -t
