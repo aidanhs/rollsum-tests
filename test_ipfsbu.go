@@ -4,7 +4,7 @@ import "bytes"
 import "fmt"
 import "os"
 import "io/ioutil"
-import "github.com/ipfs/go-ipfs-chunker"
+import "./impl/go-ipfs-chunker"
 
 func find_split(r chunk.Splitter) (uint, int) {
     bs, err := r.NextBytes()
