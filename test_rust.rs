@@ -12,13 +12,13 @@ pub fn main () {
     let mut buf = vec![];
     file.read_to_end(&mut buf).unwrap();
 
-    if algo == "bup" {
+    if algo == "rsroll-bup" {
         test_bup(buf);
-    } else if algo == "bup256" {
+    } else if algo == "rsroll-bup256" {
         test_bup256(buf);
-    } else if algo == "gear" {
+    } else if algo == "rsroll-gear" {
         test_gear(buf);
-    } else if algo == "gear256" {
+    } else if algo == "rsroll-gear256" {
         test_gear256(buf);
     } else {
         panic!("unknown algo {}", algo)
