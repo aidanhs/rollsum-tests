@@ -29,8 +29,8 @@ fn test_bup(buf: Vec<u8>) {
     let mut ofs: usize = 0;
     while ofs < buf.len() {
         let mut b = rollsum::Bup::new();
-        if let Some((count, _digest)) = b.find_chunk_edge(&buf[ofs..]) {
-            let bits = b.count_bits();
+        if let Some((count, digest)) = b.find_chunk_edge(&buf[ofs..]) {
+            let bits = b.count_bits(digest);
             println!("{} {}", count, bits);
             ofs += count;
         } else {
@@ -44,8 +44,8 @@ fn test_bup256(buf: Vec<u8>) {
     let mut ofs: usize = 0;
     while ofs < buf.len() {
         let mut b = rollsum::Bup::new_with_chunk_bits(18);
-        if let Some((count, _digest)) = b.find_chunk_edge(&buf[ofs..]) {
-            let bits = b.count_bits();
+        if let Some((count, digest)) = b.find_chunk_edge(&buf[ofs..]) {
+            let bits = b.count_bits(digest);
             println!("{} {}", count, bits);
             ofs += count;
         } else {
