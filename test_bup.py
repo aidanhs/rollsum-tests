@@ -4,9 +4,9 @@ def main():
     buf = open(sys.argv[1]).read()
     ofs = 0
     while ofs < len(buf):
-        count, bits = _helpers.splitbuf(buffer(buf, ofs))
-        print "%s %s" % (count, bits)
+        count, _ = _helpers.splitbuf(buffer(buf, ofs))
         if count == 0:
             break
+        print count
         ofs += count
 main()

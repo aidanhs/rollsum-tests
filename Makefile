@@ -33,14 +33,17 @@ preptest:
 	  go get github.com/ipfs/go-ipfs-chunker && \
 	  go build test_ipfs.go
 
+# First group is bupsplit, second group is other 8k targeting sums, third is 256k targeting sums
 test:
 	./runtest.py "$(TEST_FILES)" \
 	  "BUP=python2 -u test_bup.py" \
 	  "RSROBU=./test_rust rsroll-bup" \
-	  "RSROGE=./test_rust rsroll-gear" \
 	  "PERKEEP=./test_perkeep" \
+	  \
+	  "RSROGE=./test_rust rsroll-gear" \
 	  "IPFSRA=./test_ipfs rabin" \
 	  "IPFSSPL=./test_ipfs split" \
+	  \
 	  "RSROBU256=./test_rust rsroll-bup256" \
 	  "RSROGE256=./test_rust rsroll-gear256" \
 	  "IPFSRA256=./test_ipfs rabin256" \

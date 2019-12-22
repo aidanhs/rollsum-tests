@@ -29,67 +29,67 @@ func main() {
 }
 
 func test_split(buf []byte, avgchunk int64) {
-    find_split := func(r chunk.Splitter) (uint, int) {
+    find_split := func(r chunk.Splitter) int {
         bs, err := r.NextBytes()
         if err != nil {
             panic(err)
         }
-        return uint(len(bs)), 0
+        return len(bs)
     }
 
     s := chunk.NewSizeSplitter(bytes.NewReader(buf), avgchunk)
 
-    var ofs uint = 0
-    for ofs < uint(len(buf)) {
-        count, bits := find_split(s)
-        fmt.Printf("%d %d\n", count, bits)
+    var ofs int = 0
+    for ofs < len(buf) {
+        count := find_split(s)
         if count == 0 {
             break
         }
+        fmt.Printf("%d\n", count)
         ofs += count
     }
 }
 
 func test_rabin(buf []byte, avgchunk uint64) {
-    find_split := func(r *chunk.Rabin) (uint, int) {
+    find_split := func(r *chunk.Rabin) int {
         bs, err := r.NextBytes()
         if err != nil {
             panic(err)
         }
-        return uint(len(bs)), 0
+        return len(bs)
     }
 
     s := chunk.NewRabin(bytes.NewReader(buf), avgchunk)
 
-    var ofs uint = 0
-    for ofs < uint(len(buf)) {
-        count, bits := find_split(s)
-        fmt.Printf("%d %d\n", count, bits)
+    var ofs int = 0
+    for ofs < len(buf) {
+        count := find_split(s)
         if count == 0 {
             break
         }
+        fmt.Printf("%d\n", count)
         ofs += count
     }
 }
 
 func test_buzhash(buf []byte) {
-    find_split := func(r *chunk.Buzhash) (uint, int) {
+    find_split := func(r *chunk.Buzhash) int {
         bs, err := r.NextBytes()
         if err != nil {
             panic(err)
         }
-        return uint(len(bs)), 0
+        return len(bs)
     }
 
     s := chunk.NewBuzhash(bytes.NewReader(buf))
 
-    var ofs uint = 0
-    for ofs < uint(len(buf)) {
-        count, bits := find_split(s)
-        fmt.Printf("%d %d\n", count, bits)
+    var ofs int = 0
+    for ofs < len(buf) {
+        count := find_split(s)
         if count == 0 {
             break
         }
+        fmt.Printf("%d\n", count)
         ofs += count
     }
 }

@@ -77,7 +77,7 @@ You can limit the test files with e.g. `make TEST_FILES="test/01.test test/02.te
 # Results Commentary
 
  - Of the three identical implementations ('bupsplit'):
-   - rsroll edges out bup by small but consistent amounts
+   - rsroll edges out bup by small but consistent amounts, potentially due to python overhead
    - perkeep is slow by comparison
  - All of the IPFS implementations seem to be leaking memory pretty badly (~1x the amount being split)
  - IPFS split is a nice baseline to consider other implementations in the context of
