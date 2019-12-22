@@ -30,18 +30,23 @@ def main():
         for impl_name, impl_cmd in test_impls:
             log(f'Testing {test_file}=>{impl_name}')
             call(f'cat {test_file} > /dev/null', shell=True)
-            time = float(check_output(f'/usr/bin/time -f %U {impl_cmd} {test_file} 2>&1 >{out_tmpfile.name}', shell=True).strip())
+            time_out = check_output(f'/usr/bin/time -f "%U %M" {impl_cmd} {test_file} 2>&1 >{out_tmpfile.name}', shell=True).strip()
+
+            user_time, max_mem = time_out.split(b' ')
+            user_time = float(user_time)
+            max_mem = round(int(max_mem) / 1024)
             actual_sha = check_output(f'sha1sum <{out_tmpfile.name}', shell=True)
             err = actual_sha != expected_sha
             count = len(open(out_tmpfile.name, 'rb').readlines())
-            res = f'{time}[{int(err)},{count}]'
+
+            res = f'{user_time}[{"X" if err else "-"},{count}l,{max_mem}M]'
             out(res, end='')
         outline()
 
     log()
     log('KEY')
-    log('Each cell is `time[err,count]`. `time` is in ms, `err` indicates whether the split result failed to')
-    log('match bup exactly and `count` indicates how many splits there were.')
+    log('Each cell is `time[err,count,mem]`. `time` is in seconds, `err` indicates whether the split result failed to')
+    log('match bup exactly, `count` indicates how many splits there were, mem indicates max memory in MB.')
     log()
 
 if __name__ == '__main__':
