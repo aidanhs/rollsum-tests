@@ -14,7 +14,7 @@ pub fn main () {
     let mut ofs: usize = 0;
     while ofs < buf.len() {
         let mut b = rollsum::Bup::new();
-        if let Some(count) = b.find_chunk_edge(&buf[ofs..]) {
+        if let Some((count, _digest)) = b.find_chunk_edge(&buf[ofs..]) {
             let bits = b.count_bits();
             println!("{} {}", count, bits);
             ofs += count;
