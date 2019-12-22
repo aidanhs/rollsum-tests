@@ -52,20 +52,4 @@ preptest:
 	  go build test_ipfsbu.go
 
 test:
-	( \
-	    echo "FILE SIZE BUP(err,cnt) RSROLL(err,cnt) PERKEEP(err,cnt) IPFSRA(err,cnt) IPFSSPL(err,cnt) RSROLL256(err,cnt) IPFSRA256(err,cnt) IPFSSPL256(err,cnt) IPFSBU(err,cnt)"; \
-	    export OUT_TMPFILE=$$(mktemp); \
-	    for f in $(TEST_FILES); do \
-	        if [ ! -f $$f -o ! -f $$f.sum ]; then echo "INVALID FILE $$f" >&2; exit 1; fi; \
-	        echo -n "$$(basename $$f) $$(du -h $$f | cut -f1) "; \
-	        EXPECT=$$(cat $$f.sum); \
-	        for CMD in "$(BUP_CMD)" "$(RSROLL_CMD)" "$(PERKEEP_CMD)" "$(IPFSRA_CMD)" "$(IPFSSPL_CMD)" "$(RSROLL256_CMD)" "$(IPFSRA256_CMD)" "$(IPFSSPL256_CMD)" "$(IPFSBU_CMD)"; do \
-	            cat $$f > /dev/null; \
-	            TIME=$$(/usr/bin/time -f %U $$CMD $$f 2>&1 >$$OUT_TMPFILE); \
-	            VALID="$$([ "$$(sha1sum <$$OUT_TMPFILE)" = "$$EXPECT" ]; echo -n "$$?")"; \
-	            COUNT="$$(wc -l <$$OUT_TMPFILE)"; \
-	            echo -n "$$TIME[$$VALID,$$COUNT] "; \
-	        done; \
-	        echo; \
-	    done \
-	) | column -t
+	./runtest.py "$(TEST_FILES)" "BUP=$(BUP_CMD)" "RSROLL=$(RSROLL_CMD)" "PERKEEP=$(PERKEEP_CMD)" "IPFSRA=$(IPFSRA_CMD)" "IPFSSPL=$(IPFSSPL_CMD)" "RSROLL256=$(RSROLL256_CMD)" "IPFSRA256=$(IPFSRA256_CMD)" "IPFSSPL256=$(IPFSSPL256_CMD)" "IPFSBU=$(IPFSBU_CMD)" | column -t
