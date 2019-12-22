@@ -1,0 +1,9 @@
+[submodule "impl/bup"]
+	path = impl/bup
+	url = git@github.com:bup/bup.git
+[submodule "impl/rsroll"]
+	path = impl/rsroll
+	url = git@github.com:aidanhs/rsroll.git
+[submodule "impl/perkeep"]
+	path = impl/perkeep
+	url = git@github.com:perkeep/perkeep.git

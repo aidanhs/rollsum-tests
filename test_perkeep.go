@@ -3,7 +3,7 @@ package main
 import "fmt"
 import "os"
 import "io/ioutil"
-import "./camlistore/pkg/rollsum"
+import "rollsum"
 
 func find_split(buf []byte) (uint, int) {
     bits := -1
