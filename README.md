@@ -113,9 +113,14 @@ To regenerate sums:
 for f in test/*.test; do ./test_rust rsroll-bup $f | sha1sum > $f.sum; done
 ```
 
-Bugs found by this repo:
+Bugs generally:
+ - https://github.com/ipfs/notes/issues/1#issuecomment-118594710 - strong agree with this comment, I also found most of them were wrong when
+   I was writing my own
+
+Bugs found/comments inspired by this repo:
  - https://github.com/perkeep/perkeep/issues/611
  - https://gitlab.com/asuran-rs/libasuran/merge\_requests/2
+ - https://github.com/ipfs/specs/issues/227
 
 TODO:
  - it's not useful to have splits before the window has been filled - fix it
@@ -131,3 +136,7 @@ TODO:
    - even better, actually do benchmarking properly - take inspiration from statistics, e.g. Go used by
      [go-ipfs-chunker](https://github.com/ipfs/go-ipfs-chunker/commit/79bdab24e1ecceaadf619ec33a56cadb9760e5c7),
      `cargo bench` or https://jsperf.com/
+ - add SSE2-optimised rabin https://github.com/kevinko/rabin
+ - add restic
+ - add tarsnap https://github.com/Tarsnap/tarsnap/blob/master/tar/multitape/chunkify.c
+ - read some of the papers on https://github.com/ipfs/go-ipfs-chunker/issues/7#issuecomment-423590927 to see if there are any other interesting things
