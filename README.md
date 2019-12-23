@@ -28,7 +28,7 @@ Clone this repo, get the rollsum implementations and build a Docker image with t
 
 ```
 $ git clone https://github.com/aidanhs/rollsum-tests.git && cd rollsum-tests && git submodule update --init --recursive
-$ make dep # create an image for the container
+$ make container # create an image for the container
 ```
 
 # Running Tests
@@ -42,6 +42,7 @@ below 1.5GB.
 $ podman run -it -v $(pwd):/work --tmpfs /tmp --rm rollsum-tests bash
 # make testfiles # generate deterministic test files
 [...]
+# make rebuilddep # wipe and build all the dependencies
 # make preptest # build the assorted test programs
 [...]
 ```
