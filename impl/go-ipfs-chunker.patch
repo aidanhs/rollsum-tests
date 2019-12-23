@@ -1,0 +1,32 @@
+diff --git a/buzhash.go b/buzhash.go
+index b3de95f..d718c65 100644
+--- a/buzhash.go
++++ b/buzhash.go
+@@ -8,9 +8,9 @@ import (
+ )
+ 
+ const (
+-	buzMin  = 128 << 10
+-	buzMax  = 512 << 10
+-	buzMask = 1<<17 - 1
++	buzMin  = 32 // size of window
++	buzMax  = 1024 * 1024 * 10
++	buzMask = 1<<18 - 1
+ )
+ 
+ type Buzhash struct {
+diff --git a/rabin.go b/rabin.go
+index 4247057..2a27856 100644
+--- a/rabin.go
++++ b/rabin.go
+@@ -20,8 +20,8 @@ type Rabin struct {
+ // NewRabin creates a new Rabin splitter with the given
+ // average block size.
+ func NewRabin(r io.Reader, avgBlkSize uint64) *Rabin {
+-	min := avgBlkSize / 3
+-	max := avgBlkSize + (avgBlkSize / 2)
++	var min uint64 = 16 // size of window - https://github.com/whyrusleeping/chunker/blob/ababbf8/chunker.go#L16
++	var max uint64 = 1024 * 1024 * 10
+ 
+ 	return NewRabinMinMax(r, min, avgBlkSize, max)
+ }
