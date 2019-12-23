@@ -127,4 +127,7 @@ TODO:
  - add the buzhash implementation from attic - https://github.com/jborg/attic/blob/master/attic/\_chunker.c
  - add https://github.com/nlfiedler/fastcdc-rs/blob/master/src/lib.rs
  - add librsync
- - have the benchmarks repeat the measurements 10 times (or actually do benchmarking properly) (that is, within the test programs themselves)
+ - have the benchmarks repeat the measurements 10 times (within the test programs themselves)
+   - even better, actually do benchmarking properly - take inspiration from statistics, e.g. Go used by
+     [go-ipfs-chunker](https://github.com/ipfs/go-ipfs-chunker/commit/79bdab24e1ecceaadf619ec33a56cadb9760e5c7),
+     `cargo bench` or https://jsperf.com/
