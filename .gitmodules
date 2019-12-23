@@ -10,3 +10,9 @@
 [submodule "impl/go-ipfs-chunker"]
 	path = impl/go-ipfs-chunker
 	url = git@github.com:ipfs/go-ipfs-chunker.git
+[submodule "impl/bita"]
+	path = impl/bita
+	url = git@github.com:oll3/bita.git
+[submodule "impl/libasuran"]
+	path = impl/libasuran
+	url = git@gitlab.com:asuran-rs/libasuran.git

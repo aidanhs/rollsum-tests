@@ -46,7 +46,7 @@ def main():
             err = actual_sha != expected_sha
             sizes = [int(size) for size in open(out_tmpfile.name, 'rb').readlines()]
             count = len(sizes)
-            if count > 1000:
+            if count > 500:
                 pstdev = round(statistics.pstdev(sizes))
             else:
                 pstdev = '-'
@@ -65,7 +65,7 @@ def main():
     log('- Each cell is `time[err,count,pstdev,mem]`. `time` is in seconds, `err` indicates whether the split result failed')
     log('  to match bup exactly, `count` indicates how many splits there were, `pstdev` indicates the standard devision of the')
     log('  split sizes and `mem` indicates max memory in MB.')
-    log('- Standard deviation is only calculated for tests with >1000 splits to try and give a rough judgement on the hash')
+    log('- Standard deviation is only calculated for tests with >500 splits to try and give a rough judgement on the hash')
     log('  algorighm quality (intuitively I think random data should be a happy case for a hash).')
     log('- To save screen space, the common results from non-erroring lines are collapsed.')
     log()
