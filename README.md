@@ -89,8 +89,11 @@ You can limit the test files with e.g. `make TEST_FILES="test/01.test test/02.te
 
 # Misc
 
-
 To regenerate sums:
 ```
 for f in test/*.test; do ./test_rust rsroll-bup $f | sha1sum > $f.sum; done
 ```
+
+Bugs found by this repo:
+ - https://github.com/perkeep/perkeep/issues/611
+ - https://gitlab.com/asuran-rs/libasuran/merge_requests/2
