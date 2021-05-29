@@ -1,5 +1,12 @@
 # Tests for assorted rollsum implementations
 
+## Related Analysis
+
+Other interesting related analysis are available.
+
+  - [dbaarda/rollsum-tests](https://github.com/dbaarda/rollsum-tests/blob/master/RESULTS.rst) - analysis of different rollsum algorithm's hashing performance for different applications.
+  - [dbaarda/rollsum-chunking](https://github.com/dbaarda/rollsum-chunking/blob/master/RESULTS.rst) - analysis of different chunking algorithm's [CDC] deduplication performance.
+
 ## Competitors
 
 The following rollsum algorithms and implementations are tested:
